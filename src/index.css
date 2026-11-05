@@ -1,0 +1,460 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif;
+  --color-xiantra-base: #050911;
+  --color-xiantra-light: #F8FAFC;
+  --color-xiantra-blue: #2563eb;
+  --color-xiantra-cyan: #06b6d4;
+  --color-xiantra-accent: #38bdf8;
+  --color-fintech-midnight: #050911;
+  --color-fintech-surface: #0A111E;
+  --color-fintech-card: #0F1A2E;
+  --color-fintech-emerald: #10b981;
+  --color-fintech-emerald-dark: #059669;
+  --color-fintech-emerald-light: #34d399;
+}
+
+@layer base {
+  html {
+    background-color: #050911;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    overflow-x: clip;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  html.light {
+    background-color: #F8FAFC;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', 'Outfit', system-ui, -apple-system, sans-serif;
+    letter-spacing: -0.014em;
+    background-color: #050911;
+    color: #f1f5f9;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    overflow-x: clip;
+    min-width: 320px;
+  }
+
+  html.light body {
+    background-color: #F8FAFC;
+    color: #0F172A;
+  }
+
+  h1, h2, h3, h4, .font-heading {
+    font-family: 'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif;
+    letter-spacing: -0.03em;
+  }
+}
+
+/* ============================================================================
+   FLUID TYPOGRAPHY & RESPONSIVE LAYOUT SYSTEM (clamp / min / max / vw)
+   ============================================================================ */
+
+.heading-hero-fluid {
+  font-size: clamp(1.85rem, 3.4vw + 0.7rem, 3.65rem);
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.heading-section-fluid {
+  font-size: clamp(1.55rem, 2.5vw + 0.55rem, 2.85rem);
+  line-height: 1.14;
+  text-wrap: balance;
+}
+
+.heading-card-fluid {
+  font-size: clamp(1.125rem, 1.1vw + 0.45rem, 1.45rem);
+  line-height: 1.24;
+}
+
+.body-fluid {
+  font-size: clamp(0.9375rem, 0.4vw + 0.82rem, 1.125rem);
+  line-height: 1.62;
+}
+
+.section-padding-fluid {
+  padding-top: clamp(3.5rem, 6vw, 7rem);
+  padding-bottom: clamp(3.5rem, 6vw, 7rem);
+}
+
+/* Adaptive Container Scaling for Reference Viewports (375px -> 1920px) */
+.container-xiantra {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: clamp(1rem, 3.5vw, 2.5rem);
+  padding-right: clamp(1rem, 3.5vw, 2.5rem);
+  max-width: 1280px;
+}
+
+/* ============================================================================
+   ORGANIZED MEDIA QUERIES FOR DESKTOP, TABLET & MOBILE REFERENCE RESOLUTIONS
+   ============================================================================ */
+
+/* C. MOBILE REFERENCE RESOLUTIONS: 375px, 390px, 430px, 480px */
+@media (max-width: 480px) {
+  .heading-hero-fluid {
+    font-size: clamp(1.75rem, 6.2vw, 2.25rem);
+    line-height: 1.13;
+  }
+
+  .heading-section-fluid {
+    font-size: clamp(1.45rem, 5.4vw, 1.85rem);
+    line-height: 1.16;
+  }
+
+  /* Guarantee 16px on mobile form inputs to prevent iOS Safari auto-zoom */
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+/* B. TABLET REFERENCE RESOLUTIONS: 768px, 820px, 1024px */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .container-xiantra {
+    max-width: 960px;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  .heading-hero-fluid {
+    font-size: clamp(2.25rem, 3.8vw, 2.95rem);
+  }
+}
+
+/* A. DESKTOP REFERENCE RESOLUTIONS: 1366px, 1440px, 1920px */
+@media (min-width: 1366px) {
+  .container-xiantra {
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .container-xiantra {
+    max-width: 1340px;
+  }
+}
+
+@media (min-width: 1800px) {
+  .container-xiantra {
+    max-width: 1440px;
+  }
+}
+
+/* ============================================================================
+   HORIZONTAL TOUCH SWIPE & SAFE AREA UTILITIES
+   ============================================================================ */
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.snap-x-touch {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.snap-x-touch::-webkit-scrollbar {
+  display: none;
+}
+
+.pb-safe {
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+}
+
+.pt-safe {
+  padding-top: max(0px, env(safe-area-inset-top));
+}
+
+/* ============================================================================
+   BACKGROUND CYBER GRID MATRIX
+   ============================================================================ */
+@keyframes gridShift {
+  0% {
+    background-position: 0 0, 16px 16px;
+  }
+  100% {
+    background-position: 32px 32px, 48px 48px;
+  }
+}
+
+.bg-grid-tech {
+  background-image: radial-gradient(rgba(37, 99, 235, 0.16) 1.2px, transparent 1.2px),
+                    radial-gradient(rgba(6, 182, 212, 0.1) 1.2px, transparent 1.2px);
+  background-size: 32px 32px;
+  background-position: 0 0, 16px 16px;
+}
+
+html.light .bg-grid-tech {
+  background-image: radial-gradient(rgba(37, 99, 235, 0.14) 1.2px, transparent 1.2px),
+                    radial-gradient(rgba(2, 132, 199, 0.1) 1.2px, transparent 1.2px);
+}
+
+/* ============================================================================
+   ADAPTIVE GLASS-PANEL SYSTEM (DARK & LIGHT CORPORATE IDENTITY)
+   ============================================================================ */
+
+/* Light Mode Glass Panel */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(15, 23, 42, 0.09);
+  box-shadow: 0 12px 32px -8px rgba(15, 23, 42, 0.07),
+              inset 0 1px 0 0 rgba(255, 255, 255, 0.9);
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+/* Dark Mode Glass Panel */
+.dark .glass-panel {
+  background: rgba(10, 16, 32, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 34px -8px rgba(0, 0, 0, 0.55),
+              inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+}
+
+/* Light Mode Neon Glass Panel */
+.glass-panel-neon {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(240, 249, 255, 0.92) 100%);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(2, 132, 199, 0.34);
+  box-shadow: 0 16px 40px -10px rgba(2, 132, 199, 0.14),
+              inset 0 1px 1px 0 rgba(255, 255, 255, 0.95);
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+/* Dark Mode Neon Glass Panel */
+.dark .glass-panel-neon {
+  background: linear-gradient(135deg, rgba(14, 24, 52, 0.72) 0%, rgba(6, 12, 28, 0.85) 100%);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(56, 189, 248, 0.32);
+  box-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.65),
+              inset 0 1px 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.glass-panel-hover {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .glass-panel-hover:hover {
+    background: rgba(255, 255, 255, 0.98);
+    border-color: rgba(2, 132, 199, 0.45);
+    box-shadow: 0 20px 40px -12px rgba(2, 132, 199, 0.16),
+                0 0 24px -5px rgba(37, 99, 235, 0.14);
+    transform: translateY(-4px);
+  }
+
+  .dark .glass-panel-hover:hover {
+    background: rgba(14, 26, 56, 0.76);
+    border-color: rgba(56, 189, 248, 0.45);
+    box-shadow: 0 20px 40px -12px rgba(14, 165, 233, 0.22),
+                0 0 25px -5px rgba(37, 99, 235, 0.25);
+    transform: translateY(-4px);
+  }
+}
+
+/* Xiantra Signature Gradients & Glows */
+.text-gradient-xiantra {
+  background: linear-gradient(135deg, #0284c7 0%, #2563eb 50%, #0f172a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.dark .text-gradient-xiantra {
+  background: linear-gradient(135deg, #60a5fa 0%, #38bdf8 50%, #ffffff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.text-glow-cyan {
+  text-shadow: 0 0 20px rgba(6, 182, 212, 0.5), 0 0 40px rgba(37, 99, 235, 0.25);
+}
+
+.text-glow-indigo {
+  text-shadow: 0 0 20px rgba(37, 99, 235, 0.5), 0 0 40px rgba(29, 78, 216, 0.25);
+}
+
+/* Button with subtle energetic glow */
+.btn-xiantra-primary {
+  background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #0284c7 100%);
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 4px 20px -2px rgba(37, 99, 235, 0.45);
+  transition: all 0.25s ease;
+}
+
+.btn-xiantra-primary:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #06b6d4 100%);
+  box-shadow: 0 8px 28px -2px rgba(37, 99, 235, 0.6), 0 0 16px rgba(6, 182, 212, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Luxury Emerald Fintech CTA Button with Shimmer */
+.btn-xiantra-emerald {
+  background: linear-gradient(135deg, #059669 0%, #10b981 50%, #047857 100%);
+  color: #ffffff;
+  font-weight: 800;
+  box-shadow: 0 6px 24px -2px rgba(16, 185, 129, 0.45), 0 0 18px rgba(16, 185, 129, 0.25);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-xiantra-emerald::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  transition: left 0.75s ease;
+}
+
+.btn-xiantra-emerald:hover::before {
+  left: 100%;
+}
+
+.btn-xiantra-emerald:hover {
+  background: linear-gradient(135deg, #10b981 0%, #34d399 50%, #059669 100%);
+  box-shadow: 0 10px 35px -2px rgba(16, 185, 129, 0.65), 0 0 25px rgba(52, 211, 153, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Fintech Glow & Elevation Utilities */
+.shadow-emerald-glow {
+  box-shadow: 0 0 35px -5px rgba(16, 185, 129, 0.25), 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+}
+
+.shadow-fintech-card {
+  box-shadow: 0 20px 45px -10px rgba(5, 9, 17, 0.8), 0 0 20px rgba(16, 185, 129, 0.08);
+}
+
+html.light .shadow-fintech-card {
+  box-shadow: 0 16px 36px -8px rgba(15, 23, 42, 0.08), 0 0 15px rgba(16, 185, 129, 0.06);
+}
+
+/* Shimmer beam effect */
+@keyframes shimmerBeam {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer-text {
+  background: linear-gradient(90deg, #0284c7 0%, #1e293b 40%, #2563eb 70%, #0284c7 100%);
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shimmerBeam 5s linear infinite;
+}
+
+.dark .shimmer-text {
+  background: linear-gradient(90deg, #38bdf8 0%, #ffffff 40%, #60a5fa 70%, #38bdf8 100%);
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shimmerBeam 5s linear infinite;
+}
+
+/* Pulsing neon rings */
+@keyframes pulseRing {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 12px rgba(37, 99, 235, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+  }
+}
+
+.pulse-ring {
+  animation: pulseRing 2.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+/* Floating animation for cards & badges */
+@keyframes floatGentle {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+.animate-float {
+  animation: floatGentle 5s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: floatGentle 5s ease-in-out 2.5s infinite;
+}
+
+/* Aurora background drifting animations */
+@keyframes pulseSlow {
+  0%, 100% {
+    opacity: 0.8;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.08);
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulseSlow 8s ease-in-out infinite;
+}
+
+@keyframes floatSlowNebula {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  50% {
+    transform: translate(25px, -20px) scale(1.05);
+  }
+}
+
+.animate-float-slow {
+  animation: floatSlowNebula 12s ease-in-out infinite;
+}
+
+.animate-float-delayed-slow {
+  animation: floatSlowNebula 14s ease-in-out 4s infinite;
+}
+
+/* Glowing section dividers */
+.divider-neon {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(37, 99, 235, 0.25) 25%, rgba(6, 182, 212, 0.4) 50%, rgba(37, 99, 235, 0.25) 75%, transparent 100%);
+}
