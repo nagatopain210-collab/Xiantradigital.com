@@ -24,7 +24,9 @@ interface TopOfferBannerProps {
 
 export const TopOfferBanner: React.FC<TopOfferBannerProps> = ({ onClaimOffer }) => {
   const [isVisible, setIsVisible] = useState(true);
-  const [drawerOpen, setDrawerOpen] = useState(true);
+  const [drawerOpen, setDrawerOpen] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth >= 1024 : false
+  );
   const [copiedCoupon, setCopiedCoupon] = useState(false);
 
   // Real-time Countdown timer targeting end of November Black Friday
@@ -186,6 +188,10 @@ export const TopOfferBanner: React.FC<TopOfferBannerProps> = ({ onClaimOffer }) 
                 <img
                   src={blackFridayImg}
                   alt="Black Friday Noviembre Xiantra Digital Solutions"
+                  width={640}
+                  height={360}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-40 sm:h-52 object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-transparent pointer-events-none" />

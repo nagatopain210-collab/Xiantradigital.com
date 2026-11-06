@@ -70,26 +70,26 @@ export const ClientAdminDemoModal: React.FC<ClientAdminDemoModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-950/85 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-5xl max-h-[90dvh] flex flex-col bg-[#080B14] rounded-2xl border border-cyan-500/40 shadow-2xl overflow-hidden text-slate-100">
-        {/* Top Header Bar */}
-        <div className="px-4 sm:px-5 py-3 bg-slate-900/95 border-b border-slate-800 flex items-center justify-between gap-3">
+      <div className="relative w-full max-w-5xl max-h-[92dvh] flex flex-col bg-[#080B14] rounded-2xl sm:rounded-3xl border border-emerald-500/40 shadow-2xl overflow-hidden text-slate-100">
+        {/* Top Header Bar: Benefits-Driven Value Proposition */}
+        <div className="px-4 sm:px-6 py-3.5 bg-gradient-to-r from-slate-900 via-[#0A1322] to-slate-900 border-b border-slate-800 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center text-slate-950 shadow-md shadow-cyan-500/20 shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-cyan-500 flex items-center justify-center text-slate-950 shadow-md shadow-emerald-500/20 shrink-0">
               <LayoutDashboard className="w-5 h-5 text-slate-950" />
             </div>
             <div className="min-w-0">
-              <div className="flex items-center gap-2">
-                <span className="font-extrabold text-white text-xs sm:text-base truncate">
-                  {isConfigured ? `Panel de Control · ${companyDisplayName}` : 'Simulador del Panel Administrativo'}
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="font-extrabold text-white text-sm sm:text-base truncate">
+                  {isConfigured ? `Tu Centro de Mando · ${companyDisplayName}` : 'Tu Centro de Mando 24/7'}
                 </span>
-                <span className="text-[10px] font-mono text-cyan-400 bg-cyan-950/80 border border-cyan-700/60 px-2 py-0.5 rounded font-bold shrink-0">
-                  {isConfigured ? 'DEMO ACTIVO' : 'PASO 1'}
+                <span className="text-[10px] font-mono text-emerald-300 bg-emerald-950/90 border border-emerald-500/50 px-2 py-0.5 rounded-full font-bold shrink-0">
+                  {isConfigured ? 'EN VIVO' : 'INCLUIDO GRATIS'}
                 </span>
               </div>
-              <p className="text-xs text-slate-400 hidden sm:block truncate">
+              <p className="text-xs text-slate-300 hidden sm:block truncate">
                 {isConfigured
-                  ? `Administrador: ${clientName} (${clientEmail}) · Sincronizado con Chatbot de IA`
-                  : 'Ingresa los datos de tu empresa para generar un panel interactivo a tu medida'}
+                  ? `Control comercial de ${clientName} · Gestión de clientes 24/7 y seguimiento de prospectos en vivo`
+                  : 'Controla tus clientes 24/7 y haz seguimiento en tiempo real a cada prospecto que entra a tu web'}
               </p>
             </div>
           </div>
@@ -98,7 +98,7 @@ export const ClientAdminDemoModal: React.FC<ClientAdminDemoModalProps> = ({
             {isConfigured && (
               <button
                 onClick={() => setIsConfigured(false)}
-                className="hidden sm:inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white px-2.5 py-1.5 rounded-lg border border-slate-800 hover:border-slate-700 transition-colors cursor-pointer"
+                className="hidden sm:inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white px-2.5 py-1.5 rounded-lg border border-slate-800 hover:border-slate-700 transition-colors cursor-pointer"
                 title="Cambiar datos de empresa"
               >
                 <RefreshCw className="w-3 h-3" />
@@ -108,7 +108,7 @@ export const ClientAdminDemoModal: React.FC<ClientAdminDemoModalProps> = ({
 
             <button
               onClick={onClose}
-              className="min-h-[40px] min-w-[40px] flex items-center justify-center text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors cursor-pointer"
+              className="min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition-colors cursor-pointer"
               aria-label="Cerrar modal"
             >
               <X className="w-5 h-5" />
@@ -118,82 +118,111 @@ export const ClientAdminDemoModal: React.FC<ClientAdminDemoModalProps> = ({
 
         {/* Modal Body */}
         <div className="flex-1 overflow-y-auto bg-[#05070D]">
-          {/* ================= STEP 1: ONBOARDING CAPTURE ================= */}
+          {/* ================= STEP 1: ONBOARDING CAPTURE WITH BENEFITS-DRIVEN COPY ================= */}
           {!isConfigured ? (
-            <div className="min-h-full flex items-center justify-center p-4 sm:p-10">
-              <div className="w-full max-w-lg bg-slate-900/90 rounded-2xl p-5 sm:p-8 border border-cyan-500/30 shadow-2xl">
-                <div className="text-center mb-5 sm:mb-6">
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-cyan-950/80 border border-cyan-500/50 text-cyan-400 flex items-center justify-center mx-auto mb-3 shadow-lg shadow-cyan-950">
-                    <Sparkles className="w-6 h-6 sm:w-7 sm:h-7" />
+            <div className="min-h-full flex items-center justify-center p-3.5 sm:p-8">
+              <div className="w-full max-w-xl bg-slate-900/95 rounded-2xl p-5 sm:p-8 border border-emerald-500/35 shadow-2xl">
+                <div className="text-center mb-5 space-y-2">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[11px] font-mono font-bold uppercase tracking-wider">
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>Tu Centro de Mando</span>
                   </div>
-                  <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-                    Personaliza tu Panel Administrativo
+                  <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight leading-snug">
+                    Mira cómo controlarás tus ventas y clientes desde cualquier lugar
                   </h3>
-                  <p className="text-xs sm:text-sm text-slate-300 mt-1">
-                    Escribe tus datos para entrar al simulador interactivo con las métricas y el informe de rendimiento de tu empresa.
+                  <p className="text-xs sm:text-sm text-slate-300 max-w-md mx-auto leading-relaxed">
+                    Olvídate de gráficas confusas. Este panel privado te muestra en segundos cuántas personas visitan tu web y cuántos negocios está cerrando tu asistente de IA.
                   </p>
                 </div>
 
-                <form onSubmit={handleStartDemo} className="space-y-4 text-xs">
-                  <div>
-                    <label className="text-slate-300 font-bold block mb-1 text-[11px] flex items-center gap-1.5">
-                      <User className="w-3.5 h-3.5 text-cyan-400" />
-                      <span>Tu Nombre y Apellido *</span>
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={clientName}
-                      onChange={(e) => setClientName(e.target.value)}
-                      placeholder="Ej. Carlos Restrepo"
-                      className="w-full min-h-[46px] bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-base sm:text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400"
-                    />
+                {/* Benefits-Driven Bullet Points */}
+                <div className="mb-5 p-3.5 sm:p-4 rounded-xl bg-slate-950/90 border border-slate-800/90 space-y-2.5 text-xs">
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                    <span className="text-slate-200">
+                      <strong className="text-white">Gestión de clientes 24/7:</strong> Revisa las conversaciones y cotizaciones que tu asistente responde de día, de noche y en festivos.
+                    </span>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                    <span className="text-slate-200">
+                      <strong className="text-white">Seguimiento de prospectos en tiempo real:</strong> Identifica al instante qué clientes tienen intención de compra inmediata para llamarlos o cerrar por WhatsApp.
+                    </span>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                    <span className="text-slate-200">
+                      <strong className="text-white">Resultados claros sin tecnicismos:</strong> Descarga tu lista de contactos y mide tus ingresos reales desde tu celular o computador.
+                    </span>
+                  </div>
+                </div>
+
+                <form onSubmit={handleStartDemo} className="space-y-3.5 text-xs">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-slate-200 font-bold block mb-1 text-[11px] flex items-center gap-1.5">
+                        <User className="w-3.5 h-3.5 text-emerald-400" />
+                        <span>Tu Nombre *</span>
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        autoComplete="name"
+                        value={clientName}
+                        onChange={(e) => setClientName(e.target.value)}
+                        placeholder="Ej. Carlos Restrepo"
+                        className="w-full min-h-[46px] bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-base sm:text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-400"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-slate-200 font-bold block mb-1 text-[11px] flex items-center gap-1.5">
+                        <Building className="w-3.5 h-3.5 text-emerald-400" />
+                        <span>Nombre de tu Empresa *</span>
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        autoComplete="organization"
+                        value={clientCompany}
+                        onChange={(e) => setClientCompany(e.target.value)}
+                        placeholder="Ej. Maquinaria Industrial SAS"
+                        className="w-full min-h-[46px] bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-base sm:text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-400"
+                      />
+                    </div>
                   </div>
 
                   <div>
-                    <label className="text-slate-300 font-bold block mb-1 text-[11px] flex items-center gap-1.5">
-                      <Mail className="w-3.5 h-3.5 text-cyan-400" />
-                      <span>Tu Correo Corporativo *</span>
+                    <label className="text-slate-200 font-bold block mb-1 text-[11px] flex items-center gap-1.5">
+                      <Mail className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>Tu Correo Empresarial *</span>
                     </label>
                     <input
                       type="email"
+                      inputMode="email"
+                      autoComplete="email"
                       required
                       value={clientEmail}
                       onChange={(e) => setClientEmail(e.target.value)}
                       placeholder="carlos@empresa.com"
-                      className="w-full min-h-[46px] bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-base sm:text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400"
+                      className="w-full min-h-[46px] bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-base sm:text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-400"
                     />
                   </div>
 
-                  <div>
-                    <label className="text-slate-300 font-bold block mb-1 text-[11px] flex items-center gap-1.5">
-                      <Building className="w-3.5 h-3.5 text-cyan-400" />
-                      <span>Nombre de tu Empresa *</span>
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={clientCompany}
-                      onChange={(e) => setClientCompany(e.target.value)}
-                      placeholder="Ej. Maquinaria Industrial SAS"
-                      className="w-full min-h-[46px] bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-base sm:text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400"
-                    />
-                  </div>
-
-                  <div className="pt-2">
+                  <div className="pt-1">
                     <button
                       type="submit"
                       disabled={isGenerating}
-                      className="w-full min-h-[48px] py-3.5 px-4 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-black text-xs sm:text-sm shadow-xl shadow-emerald-950 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                      className="w-full min-h-[48px] py-3.5 px-4 rounded-xl bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 hover:from-emerald-300 hover:to-cyan-300 text-slate-950 font-black text-xs sm:text-sm shadow-xl shadow-emerald-950 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]"
                     >
                       {isGenerating ? (
                         <>
                           <RefreshCw className="w-4 h-4 animate-spin" />
-                          <span>Configurando panel para {clientCompany}...</span>
+                          <span>Preparando el Centro de Mando de {clientCompany}...</span>
                         </>
                       ) : (
                         <>
-                          <span>Entrar al Demo de {clientCompany.trim() || 'Mi Empresa'}</span>
+                          <span>Ver Centro de Mando de {clientCompany.trim() || 'Mi Empresa'}</span>
                           <ArrowRight className="w-4 h-4" />
                         </>
                       )}
@@ -202,7 +231,7 @@ export const ClientAdminDemoModal: React.FC<ClientAdminDemoModalProps> = ({
 
                   <div className="pt-1 text-center">
                     <span className="text-[11px] text-slate-400">
-                      Incluido como <strong className="text-cyan-300">PLUS GRATIS</strong> (Ahorro de $1.200.000 COP) con tu web.
+                      Incluido <strong className="text-emerald-400">SIN COSTO MENSUAL</strong> (Valorado en $1.200.000 COP) al crear tu web.
                     </span>
                   </div>
                 </form>

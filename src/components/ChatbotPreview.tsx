@@ -66,11 +66,18 @@ export const ChatbotPreview: React.FC = () => {
         kpiHighlight: 'Atención autónoma en < 3 segundos 24/7',
       };
     }
+    if (q.includes('mantenimiento') || q.includes('soporte') || q.includes('cambios')) {
+      return {
+        text: 'Nuestros planes de mantenimiento mensual (pago mensual por 1 año de servicio) son:\n• Basic ($79.999 COP / $21 USD): Monitoreo 24/7, hosting rápido y soporte preventivo.\n• Plus ($140.000 COP / $36 USD): Incluye 5 cambios mensuales y calibración del bot IA.\n• Expert ($250.000 COP / $65 USD): Incluye 20 cambios mensuales y soporte VIP dedicado.\n¿Te gustaría activar alguno para tu página web?',
+        quickReplies: ['Quiero el Plan Plus (5 cambios)', 'Quiero el Plan Expert (20 cambios)', 'Hablar por WhatsApp'],
+        kpiHighlight: 'Mantenimiento mensual con hasta 20 cambios',
+      };
+    }
     if (q.includes('cuesta') || q.includes('precio') || q.includes('inversión') || q.includes('cuánto')) {
       return {
-        text: 'Nuestros proyectos llave en mano inician desde $799.999 COP para Landing Pages de alta velocidad, $1.490.000 COP para Web Corporativa con IA, y $2.890.000 COP para E-Commerce completo. ¡Todos incluyen el Panel Administrador sin costo adicional! ¿Para qué empresa sería el proyecto?',
+        text: 'Nuestros sistemas completos inician desde $135 USD ($519.999 COP) con entrega en 30 días y mantenimiento incluido. Si ya tienes página web, ofrecemos planes de mantenimiento mensual: Basic ($79.999 COP / $21 USD), Plus con 5 cambios ($140.000 COP / $36 USD) y Expert con 20 cambios ($250.000 COP / $65 USD), bajo pago mensual por 1 año de servicio. ¿Cuál te interesa más?',
         quickReplies: ['Quiero una propuesta formal', 'Ver planes de mantenimiento', 'Chatear por WhatsApp'],
-        kpiHighlight: 'Planes desde $799.999 COP llave en mano',
+        kpiHighlight: 'Sistemas desde $135 USD · Mantenimiento desde $79.999 COP',
       };
     }
 

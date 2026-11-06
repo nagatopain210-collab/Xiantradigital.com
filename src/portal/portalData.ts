@@ -309,7 +309,7 @@ export const INITIAL_CHATBOT_LOGS: ChatbotConversationLog[] = [
     visitorEmail: 'gerencia@mendozaconstructora.co',
     visitorPhone: '+57 311 884 5510',
     userPrompt: '¿Cuánto cuesta implementar una página web con chatbot inteligente como el de ustedes para una empresa constructora?',
-    botResponse: '¡Buenas noches Ingeniero Rodrigo! Nuestro sistema integral para constructoras (Web Fintech + Chatbot de Calificación 24/7 + Panel Administrador) parte desde $1.490.000 COP con entrega llave en mano en 10 días y garantía de retorno. ¿Te gustaría agendar una videollamada estratégica de 15 minutos sin costo?',
+    botResponse: '¡Buenas noches Ingeniero Rodrigo! Nuestro sistema integral para constructoras (Web Fintech + Chatbot de Calificación 24/7 + Panel Administrador) parte desde $1.490.000 COP con entrega llave en mano en 30 días, plan de mantenimiento mensual incluido y garantía de retorno. ¿Te gustaría agendar una videollamada estratégica de 15 minutos sin costo?',
     leadScore: 'Clase A (Alta Prioridad)',
     qualificationScore: 99,
     estimatedValueCOP: '$3.890.000 COP',

@@ -7,19 +7,26 @@ import {
   ArrowUpRight,
   Quote,
   Zap,
+  Play,
+  Pause,
+  Volume2,
 } from 'lucide-react';
 import { MetallicLogo } from './MetallicLogo';
+import { trackConversionEvent } from '../utils/analytics';
 
 interface SocialProofCase {
   id: string;
   company: string;
   industry: string;
   city: string;
+  posterUrl: string;
+  videoDuration: string;
   primaryMetric: string;
   metricLabel: string;
   secondaryMetric: string;
   secondaryLabel: string;
   quote: string;
+  videoHighlight: string;
   executive: string;
   role: string;
   verifiedDate: string;
@@ -32,12 +39,16 @@ const DYNAMIC_PROOF_CASES: SocialProofCase[] = [
     company: 'Maquitec Ingeniería SAS',
     industry: 'Maquinaria CNC & Corte Láser',
     city: 'Bogotá / Medellín',
+    posterUrl: '/images/video_testimonial_maquitec_1793655595723.jpg',
+    videoDuration: '0:48',
     primaryMetric: '+240%',
     metricLabel: 'Solicitudes de Cotización B2B',
     secondaryMetric: '< 25s',
     secondaryLabel: 'Tiempo de Respuesta en WhatsApp',
     quote:
       'Pasamos de una web lenta que nadie visitaba a recibir cotizaciones industriales calificadas todos los días directamente en nuestro WhatsApp y panel.',
+    videoHighlight:
+      'En 3 semanas automatizamos el envío de fichas técnicas y el filtro de clientes con presupuesto real.',
     executive: 'Ing. Carlos Restrepo',
     role: 'Director Comercial',
     verifiedDate: 'Verificado 2026',
@@ -48,12 +59,16 @@ const DYNAMIC_PROOF_CASES: SocialProofCase[] = [
     company: 'DistriAlimentos de Colombia',
     industry: 'Distribución Mayorista & E-Commerce',
     city: 'Cali / Eje Cafetero',
+    posterUrl: '/images/video_testimonial_ecommerce_1793655597470.jpg',
+    videoDuration: '0:52',
     primaryMetric: '+185%',
     metricLabel: 'Pedidos Recurrentes Automatizados',
     secondaryMetric: '-61%',
     secondaryLabel: 'Reducción en Abandono de Carrito',
     quote:
       'El checkout en 1 clic con PSE y el agente Xian en WhatsApp recuperaron millones en pedidos mayoristas que antes se enfriaban por falta de seguimiento.',
+    videoHighlight:
+      'Nuestros clientes mayoristas ahora piden desde el celular en menos de 1 minuto con pago PSE integrado.',
     executive: 'Mariana Duarte',
     role: 'Líder de Canales Digitales',
     verifiedDate: 'Verificado 2026',
@@ -64,12 +79,16 @@ const DYNAMIC_PROOF_CASES: SocialProofCase[] = [
     company: 'Clínica OdontoLaser VIP',
     industry: 'Salud & Especialidades Médicas',
     city: 'Medellín',
+    posterUrl: '/images/video_testimonial_clinic_1793655597013.jpg',
+    videoDuration: '0:41',
     primaryMetric: '+310%',
     metricLabel: 'Agendamientos de Valoración',
     secondaryMetric: '24/7',
     secondaryLabel: 'Calificación Automática de Pacientes',
     quote:
       'El 65% de nuestros pacientes escriben después de las 7 PM. Hoy el agente virtual responde al instante, filtra el tratamiento y agenda la cita sin intervención humana.',
+    videoHighlight:
+      'Eliminamos las citas perdidas en noches y domingos gracias al asistente IA conectado a nuestra agenda.',
     executive: 'Dra. Claudia Valencia',
     role: 'Directora Médica General',
     verifiedDate: 'Verificado 2026',
@@ -80,12 +99,16 @@ const DYNAMIC_PROOF_CASES: SocialProofCase[] = [
     company: 'Constructora & Inmobiliaria Andes',
     industry: 'Proyectos Inmobiliarios & Finca Raíz',
     city: 'Barranquilla / Bogotá',
+    posterUrl: '/images/maquitec_case_study_1793654809199.jpg',
+    videoDuration: '0:55',
     primaryMetric: '4.9x',
     metricLabel: 'Retorno sobre Inversión Publicitaria',
     secondaryMetric: '0.38s',
     secondaryLabel: 'Velocidad de Carga Móvil',
     quote:
-      'Con el Panel Administrador de Xiantra sabemos exactamente qué campaña de Meta o Google nos trae compradores reales con presupuesto aprobado.',
+      'Con el Centro de Mando de Xiantra sabemos exactamente qué campaña de Meta o Google nos trae compradores reales con presupuesto aprobado.',
+    videoHighlight:
+      'Cada visitante móvil recibe los planos y precios al instante, triplicando las visitas a sala de ventas.',
     executive: 'Andrés Felipe Gómez',
     role: 'Gerente de Ventas y Mercadeo',
     verifiedDate: 'Verificado 2026',
@@ -104,15 +127,38 @@ export const DynamicSocialProofCarousel: React.FC<DynamicSocialProofCarouselProp
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  // On-demand video story playback state (no heavy auto-loaded streams on startup)
+  const [playingCaseId, setPlayingCaseId] = useState<string | null>(null);
+  const [playbackProgress, setPlaybackProgress] = useState(0);
 
-  // Auto-advance carousel unless user is hovering over cards
+  // Auto-advance carousel only on desktop when not hovering or playing a testimonial
   useEffect(() => {
-    if (isHovered) return;
+    if (isHovered || playingCaseId || (typeof window !== 'undefined' && window.innerWidth < 768)) {
+      return;
+    }
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % DYNAMIC_PROOF_CASES.length);
-    }, 5500);
+    }, 6000);
     return () => clearInterval(timer);
-  }, [isHovered]);
+  }, [isHovered, playingCaseId]);
+
+  // Simulate smooth on-demand testimonial playback progress
+  useEffect(() => {
+    if (!playingCaseId) {
+      setPlaybackProgress(0);
+      return;
+    }
+    const interval = setInterval(() => {
+      setPlaybackProgress((prev) => {
+        if (prev >= 100) {
+          setPlayingCaseId(null);
+          return 0;
+        }
+        return prev + 2;
+      });
+    }, 200);
+    return () => clearInterval(interval);
+  }, [playingCaseId]);
 
   const handlePrev = () => {
     setCurrentIndex((prev) => (prev - 1 + DYNAMIC_PROOF_CASES.length) % DYNAMIC_PROOF_CASES.length);
@@ -122,24 +168,37 @@ export const DynamicSocialProofCarousel: React.FC<DynamicSocialProofCarouselProp
     setCurrentIndex((prev) => (prev + 1) % DYNAMIC_PROOF_CASES.length);
   };
 
+  const togglePlayCase = (e: React.MouseEvent, id: string, company: string) => {
+    e.stopPropagation();
+    if (playingCaseId === id) {
+      setPlayingCaseId(null);
+    } else {
+      setPlayingCaseId(id);
+      setPlaybackProgress(0);
+      trackConversionEvent('service_click', `Reproducir Testimonio: ${company}`, 'social_proof');
+    }
+  };
+
   return (
     <section id="prueba-social" className="section-padding-fluid relative z-10 overflow-hidden">
       <div className="container-xiantra">
         {/* ================= HEADER WITH XIANTRA BRAND AUTHORITY ================= */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-8 sm:mb-12">
-          <div className="max-w-3xl space-y-3">
-            <div className="inline-flex items-center gap-2.5 text-xs font-mono tracking-widest text-cyan-600 dark:text-cyan-400 uppercase">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-5 mb-6 sm:mb-10">
+          <div className="max-w-3xl space-y-2.5">
+            <div className="inline-flex items-center gap-2 text-xs font-mono tracking-widest text-emerald-600 dark:text-emerald-400 uppercase">
               <MetallicLogo size="xs" iconOnly />
-              <span>PRUEBA SOCIAL DINÁMICA · VALIDACIÓN OFICIAL XIANTRA</span>
+              <span>CASOS DE ÉXITO Y TESTIMONIOS VERIFICADOS</span>
             </div>
 
             <h2 className="heading-section-fluid font-black text-slate-900 dark:text-white tracking-tight">
-              Empresas verificadas con el{' '}
-              <span className="text-gradient-xiantra">Sello de Rendimiento Xiantra</span>
+              Resultados comerciales reales en{' '}
+              <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+                empresas que digitalizaron sus ventas con IA
+              </span>
             </h2>
 
             <p className="body-fluid text-slate-600 dark:text-slate-300">
-              Desliza en móvil o pasa el cursor sobre cada caso de estudio para inspeccionar la auditoría de rendimiento validada por nuestra arquitectura comercial B2B.
+              Desliza en tu celular o pulsa en cada caso para reproducir el resumen ejecutivo bajo demanda sin ralentizar tu navegación.
             </p>
           </div>
 
@@ -151,10 +210,10 @@ export const DynamicSocialProofCarousel: React.FC<DynamicSocialProofCarouselProp
                   key={item.id}
                   onClick={() => setCurrentIndex(idx)}
                   aria-label={`Ir al caso ${idx + 1}`}
-                  className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                  className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
                     idx === currentIndex
                       ? 'w-8 bg-emerald-500 dark:bg-emerald-400'
-                      : 'w-2 bg-slate-300 dark:bg-slate-700 hover:bg-slate-400 dark:hover:bg-slate-500'
+                      : 'w-2.5 bg-slate-300 dark:bg-slate-700 hover:bg-slate-400'
                   }`}
                 />
               ))}
@@ -163,14 +222,14 @@ export const DynamicSocialProofCarousel: React.FC<DynamicSocialProofCarouselProp
             <div className="flex items-center gap-2">
               <button
                 onClick={handlePrev}
-                className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl glass-panel hover:border-cyan-500/40 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer"
+                className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl glass-panel hover:border-emerald-500/40 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer active:scale-95"
                 aria-label="Caso anterior"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
               <button
                 onClick={handleNext}
-                className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl glass-panel hover:border-cyan-500/40 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer"
+                className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl glass-panel hover:border-emerald-500/40 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer active:scale-95"
                 aria-label="Siguiente caso"
               >
                 <ChevronRight className="w-4 h-4" />
@@ -180,11 +239,12 @@ export const DynamicSocialProofCarousel: React.FC<DynamicSocialProofCarouselProp
         </div>
 
         {/* Mobile Swipe Hint */}
-        <div className="md:hidden flex items-center justify-between text-[11px] font-mono text-cyan-600 dark:text-cyan-400 mb-3">
-          <span>← Desliza horizontalmente para ver casos ({DYNAMIC_PROOF_CASES.length}) →</span>
+        <div className="md:hidden flex items-center justify-between text-[11px] font-mono text-emerald-500 dark:text-emerald-400 mb-3">
+          <span>← Desliza para explorar casos ({DYNAMIC_PROOF_CASES.length}) →</span>
+          <span>Reproducción bajo demanda</span>
         </div>
 
-        {/* ================= INTERACTIVE CARDS: HORIZONTAL SWIPE ON MOBILE, 2X2 ON TABLET, 4-COL ON DESKTOP ================= */}
+        {/* ================= TOUCH-SWIPEABLE CAROUSEL ON MOBILE, 2X2 ON TABLET, 4-COL ON DESKTOP ================= */}
         <div
           className="flex md:grid md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 overflow-x-auto md:overflow-visible snap-x-touch pb-4 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0"
           onMouseEnter={() => setIsHovered(true)}
@@ -192,48 +252,95 @@ export const DynamicSocialProofCarousel: React.FC<DynamicSocialProofCarouselProp
         >
           {DYNAMIC_PROOF_CASES.map((item, idx) => {
             const isActive = idx === currentIndex;
+            const isPlaying = playingCaseId === item.id;
 
             return (
-              <div
+              <article
                 key={item.id}
                 onClick={() => setCurrentIndex(idx)}
-                className={`min-w-[85vw] sm:min-w-[330px] md:min-w-0 snap-center shrink-0 group relative rounded-2xl p-5 sm:p-6 flex flex-col justify-between transition-all duration-500 cursor-pointer overflow-hidden ${
+                className={`min-w-[84vw] sm:min-w-[320px] md:min-w-0 snap-center shrink-0 group relative rounded-2xl p-4 sm:p-5 flex flex-col justify-between transition-all duration-300 cursor-pointer overflow-hidden ${
                   isActive
-                    ? 'glass-panel-neon border-2 border-cyan-500/60 dark:border-cyan-400/60 shadow-[0_12px_40px_-10px_rgba(6,182,212,0.28)]'
-                    : 'glass-panel glass-panel-hover hover:border-cyan-500/40'
+                    ? 'glass-panel-neon border-2 border-emerald-500/60 dark:border-emerald-400/60 shadow-lg'
+                    : 'glass-panel glass-panel-hover hover:border-emerald-500/40'
                 }`}
               >
-                {/* Micro-animation Shimmer Sweep on Hover */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/0 via-cyan-400/5 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                <div className="relative z-10 space-y-3.5">
+                  {/* On-Demand Video Testimonial Poster Container (CLS-Free) */}
+                  <div className="relative h-36 sm:h-40 w-full rounded-xl overflow-hidden bg-slate-900 border border-slate-800">
+                    <img
+                      src={item.posterUrl}
+                      alt={`Testimonio de ${item.executive} - ${item.company}`}
+                      width={400}
+                      height={225}
+                      loading="lazy"
+                      decoding="async"
+                      className={`w-full h-full object-cover transition-transform duration-500 ${
+                        isPlaying ? 'scale-105 brightness-50' : 'group-hover:scale-105 brightness-90'
+                      }`}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent" />
 
-                {/* Top Corner Xiantra Watermark Seal that illuminates on Hover */}
-                <div className="absolute -right-6 -top-6 opacity-10 group-hover:opacity-25 group-hover:rotate-6 group-hover:scale-110 transition-all duration-500 pointer-events-none">
-                  <MetallicLogo size="xl" iconOnly />
-                </div>
-
-                <div className="relative z-10 space-y-4 sm:space-y-5">
-                  {/* Top Seal: Xiantra Verified Badge */}
-                  <div className="flex items-center justify-between gap-2 pb-3 border-b border-slate-200 dark:border-slate-800/80">
-                    <div className="flex items-center gap-2">
-                      <div className="p-1 rounded-lg bg-cyan-50 dark:bg-cyan-950/80 border border-cyan-500/30 group-hover:border-cyan-400 group-hover:scale-110 transition-all duration-300">
-                        <MetallicLogo size="xs" iconOnly />
-                      </div>
-                      <div>
-                        <span className="text-[10px] font-mono font-bold text-cyan-700 dark:text-cyan-300 uppercase tracking-wider block">
-                          Éxito Validado Xiantra
-                        </span>
-                        <span className="text-[9px] font-mono text-slate-500 dark:text-slate-400 block">
-                          ID: {item.auditId} · {item.verifiedDate}
-                        </span>
-                      </div>
+                    {/* Top Audit Pill */}
+                    <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between text-[10px] font-mono">
+                      <span className="px-2 py-0.5 rounded bg-slate-950/85 border border-emerald-500/40 text-emerald-300 font-bold">
+                        {item.verifiedDate}
+                      </span>
+                      <span className="px-2 py-0.5 rounded bg-slate-950/85 text-slate-300">
+                        {item.videoDuration}
+                      </span>
                     </div>
 
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 group-hover:animate-ping shrink-0" />
+                    {/* On-Demand Play / Pause Button Overlay */}
+                    <button
+                      type="button"
+                      onClick={(e) => togglePlayCase(e, item.id, item.company)}
+                      aria-label={isPlaying ? `Pausar testimonio de ${item.company}` : `Reproducir testimonio de ${item.company}`}
+                      className="absolute inset-0 flex items-center justify-center group/play cursor-pointer focus:outline-none"
+                    >
+                      <div
+                        className={`min-h-[44px] px-3.5 py-2 rounded-full flex items-center gap-2 text-xs font-bold transition-all shadow-lg ${
+                          isPlaying
+                            ? 'bg-emerald-500 text-slate-950'
+                            : 'bg-slate-950/85 hover:bg-emerald-500 text-white hover:text-slate-950 border border-emerald-400/50'
+                        }`}
+                      >
+                        {isPlaying ? (
+                          <>
+                            <Pause className="w-3.5 h-3.5 fill-current" />
+                            <span>Pausar Caso</span>
+                          </>
+                        ) : (
+                          <>
+                            <Play className="w-3.5 h-3.5 fill-current" />
+                            <span>Ver Resumen</span>
+                          </>
+                        )}
+                      </div>
+                    </button>
+
+                    {/* Active On-Demand Story Overlay */}
+                    {isPlaying && (
+                      <div className="absolute inset-x-0 bottom-0 p-3 bg-slate-950/95 border-t border-emerald-500/40 space-y-1.5 animate-in fade-in duration-150">
+                        <div className="flex items-center gap-1.5 text-[10px] font-mono text-emerald-400 font-bold">
+                          <Volume2 className="w-3.5 h-3.5 animate-pulse" />
+                          <span>Resumen Ejecutivo:</span>
+                        </div>
+                        <p className="text-[11px] text-white leading-snug font-medium">
+                          “{item.videoHighlight}”
+                        </p>
+                        <div className="w-full h-1 rounded-full bg-slate-800 overflow-hidden">
+                          <div
+                            className="h-full bg-emerald-400 transition-all duration-200"
+                            style={{ width: `${playbackProgress}%` }}
+                          />
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Client & Sector Info */}
                   <div>
-                    <h3 className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white group-hover:text-cyan-600 dark:group-hover:text-cyan-200 transition-colors tracking-tight">
+                    <h3 className="text-base font-extrabold text-slate-900 dark:text-white tracking-tight">
                       {item.company}
                     </h3>
                     <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
@@ -241,36 +348,36 @@ export const DynamicSocialProofCarousel: React.FC<DynamicSocialProofCarouselProp
                     </p>
                   </div>
 
-                  {/* Primary & Secondary Quantitative Metrics with Hover Micro-Animation */}
-                  <div className="grid grid-cols-2 gap-2.5 pt-1">
-                    <div className="p-3 rounded-xl bg-slate-50/90 dark:bg-slate-950/90 border border-slate-200 dark:border-slate-800/90 group-hover:border-emerald-500/40 transition-colors">
+                  {/* Primary & Secondary Quantitative Metrics */}
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="p-2.5 rounded-xl bg-slate-50/90 dark:bg-slate-950/90 border border-slate-200 dark:border-slate-800/90">
                       <div className="flex items-center justify-between">
-                        <span className="text-xl sm:text-2xl font-black font-mono text-emerald-600 dark:text-emerald-400 group-hover:scale-105 transition-transform origin-left">
+                        <span className="text-lg sm:text-xl font-black font-mono text-emerald-600 dark:text-emerald-400">
                           {item.primaryMetric}
                         </span>
-                        <TrendingUp className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400 opacity-70 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0" />
+                        <TrendingUp className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                       </div>
-                      <span className="text-[10px] text-slate-600 dark:text-slate-300 leading-tight block mt-1">
+                      <span className="text-[10px] text-slate-600 dark:text-slate-300 leading-tight block mt-0.5">
                         {item.metricLabel}
                       </span>
                     </div>
 
-                    <div className="p-3 rounded-xl bg-slate-50/90 dark:bg-slate-950/90 border border-slate-200 dark:border-slate-800/90 group-hover:border-cyan-500/40 transition-colors">
+                    <div className="p-2.5 rounded-xl bg-slate-50/90 dark:bg-slate-950/90 border border-slate-200 dark:border-slate-800/90">
                       <div className="flex items-center justify-between">
-                        <span className="text-xl sm:text-2xl font-black font-mono text-cyan-600 dark:text-cyan-300 group-hover:scale-105 transition-transform origin-left">
+                        <span className="text-lg sm:text-xl font-black font-mono text-cyan-600 dark:text-cyan-300">
                           {item.secondaryMetric}
                         </span>
-                        <Zap className="w-3.5 h-3.5 text-cyan-500 dark:text-cyan-400 opacity-70 group-hover:scale-125 transition-transform shrink-0" />
+                        <Zap className="w-3.5 h-3.5 text-cyan-500 shrink-0" />
                       </div>
-                      <span className="text-[10px] text-slate-600 dark:text-slate-300 leading-tight block mt-1">
+                      <span className="text-[10px] text-slate-600 dark:text-slate-300 leading-tight block mt-0.5">
                         {item.secondaryLabel}
                       </span>
                     </div>
                   </div>
 
                   {/* Executive Testimonial Quote */}
-                  <div className="relative pt-1">
-                    <Quote className="w-4 h-4 text-cyan-500/40 dark:text-cyan-400/40 mb-1 group-hover:text-cyan-500 dark:group-hover:text-cyan-400 transition-colors" />
+                  <div className="relative pt-0.5">
+                    <Quote className="w-3.5 h-3.5 text-emerald-500/50 mb-1" />
                     <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed italic">
                       &ldquo;{item.quote}&rdquo;
                     </p>
@@ -278,51 +385,56 @@ export const DynamicSocialProofCarousel: React.FC<DynamicSocialProofCarouselProp
                 </div>
 
                 {/* Footer: Executive Attribution & Xiantra Official Stamp */}
-                <div className="relative z-10 mt-6 pt-3.5 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between">
+                <div className="relative z-10 mt-4 pt-3 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between">
                   <div>
                     <span className="text-xs font-bold text-slate-900 dark:text-white block">{item.executive}</span>
                     <span className="text-[10px] text-slate-500 dark:text-slate-400 block">{item.role}</span>
                   </div>
 
-                  <div className="inline-flex items-center gap-1 text-[10px] font-mono text-cyan-600 dark:text-cyan-400 group-hover:translate-x-0.5 transition-transform">
+                  <div className="inline-flex items-center gap-1 text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold">
                     <span>Auditado</span>
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
                   </div>
                 </div>
-              </div>
+              </article>
             );
           })}
         </div>
 
         {/* ================= BOTTOM OFFICIAL XIANTRA GUARANTEE BAR ================= */}
-        <div className="mt-8 sm:mt-10 p-5 sm:p-6 rounded-2xl glass-panel-neon flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <div className="shrink-0">
+        <div className="mt-6 sm:mt-10 p-4 sm:p-6 rounded-2xl glass-panel-neon flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5">
+            <div className="shrink-0 hidden sm:block">
               <MetallicLogo size="sm" showSubtitle={false} />
             </div>
-            <div className="h-8 w-px bg-slate-200 dark:bg-slate-800 hidden sm:block" />
             <div>
-              <h4 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">
-                Infraestructura Certificada por Xiantra Digital Solutions
-              </h4>
+              <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">
+                Resultados Respaldados por Garantía Contractual de 90 Días
+              </h3>
               <p className="text-xs text-slate-600 dark:text-slate-400">
-                Cada proyecto incluye telemetría en vivo, velocidad &lt; 0.8s y el agente ejecutivo Xian 24/7.
+                Cada sistema incluye velocidad &lt; 0.8s, agente comercial IA 24/7 y Tu Centro de Mando en vivo.
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 w-full sm:w-auto">
+          <div className="flex items-center gap-2.5 w-full sm:w-auto">
             <button
-              onClick={onOpenDemo}
-              className="flex-1 sm:flex-initial min-h-[44px] px-4 py-2.5 rounded-xl glass-panel hover:border-cyan-500/40 text-xs font-semibold text-slate-800 dark:text-slate-200 transition-colors cursor-pointer"
+              onClick={() => {
+                trackConversionEvent('demo_open', 'Ver Centro de Mando desde Casos de Éxito', 'social_proof');
+                onOpenDemo();
+              }}
+              className="flex-1 sm:flex-initial min-h-[44px] px-4 py-2.5 rounded-xl glass-panel hover:border-emerald-500/40 text-xs font-semibold text-slate-800 dark:text-slate-200 transition-colors cursor-pointer"
             >
-              Ver Panel en Vivo
+              Ver Centro de Mando
             </button>
             <button
-              onClick={onOpenQuote}
-              className="flex-1 sm:flex-initial min-h-[44px] px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-xs font-bold text-white shadow-md transition-all cursor-pointer flex items-center justify-center gap-1.5"
+              onClick={() => {
+                trackConversionEvent('quote_request', 'Cotizar Proyecto desde Casos de Éxito', 'social_proof');
+                onOpenQuote();
+              }}
+              className="flex-1 sm:flex-initial min-h-[44px] px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-xs font-extrabold text-slate-950 shadow-md transition-all cursor-pointer flex items-center justify-center gap-1.5"
             >
-              <span>Validar Mi Empresa</span>
+              <span>Cotizar para Mi Empresa</span>
               <ArrowUpRight className="w-3.5 h-3.5 shrink-0" />
             </button>
           </div>
